@@ -34,4 +34,4 @@ jobs:
         - run: echo "🍏 This job's status is ${{ job.status }}."
         - run: |
               echo "This is a deliberate failure to test our DORA metrics."
-              # exit 1
+              exit 1
