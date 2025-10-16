@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  sonarqube:
+    image: sonarqube:community
+    hostname: sonarqube
+    container_name: sonarqube-server
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - sonar-network
+
+  python-analysis:
+    build: .
+    container_name: python-sonar-analysis
+    depends_on:
+      - sonarqube
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_TOKEN=admin
+      - SONAR_PROJECT_KEY=python-demo-project
+    networks:
+      - sonar-network
+    # Override CMD to wait for SonarQube to be ready
+    command: >
+      sh -c "
+        echo 'Waiting for SonarQube to be ready...'
+        until wget -q --spider http://sonarqube:9000/api/system/status; do
+          echo 'SonarQube is unavailable - sleeping'
+          sleep 10
+        done
+        echo 'SonarQube is up - running analysis'
+        pytest --cov=. --cov-report=xml:coverage.xml --junitxml=test-results.xml &&
+        sonar-scanner \
+          -Dsonar.projectKey=python-demo-project \
+          -Dsonar.host.url=http://sonarqube:9000 \
+          -Dsonar.login=admin
+      "
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+
+networks:
+  sonar-network:
+    driver: bridge
