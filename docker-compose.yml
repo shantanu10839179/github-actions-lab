@@ -15,7 +15,7 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
     networks:
       - sonar-network
-
+###*******-------------Python Analysis Service-------------*******###
   python-analysis:
     build: .
     container_name: python-sonar-analysis
