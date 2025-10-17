@@ -1,3 +1,5 @@
+
+import os
 import requests
 import psycopg2
 from datetime import datetime, timedelta
@@ -6,15 +8,14 @@ import logging
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 
-# GitHub API token and headers
-GITHUB_TOKEN = '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'
-HEADERS = {'Authorization': f'token {GITHUB_TOKEN}'}
+# Load secrets from environment variables (.env)
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASS = os.environ.get('DB_PASS')
 
-# PostgreSQL connection details
-DB_HOST = 'localhost'
-DB_NAME = 'postgres'
-DB_USER = 'postgres'
-DB_PASS = 'postgres'
+HEADERS = {'Authorization': f'token {GITHUB_TOKEN}'}
 
 def fetch_pull_requests(repo, start_date, end_date):
     print(f"Fetching pull requests for {repo} from {start_date} to {end_date}")

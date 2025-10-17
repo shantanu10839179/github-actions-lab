@@ -6,11 +6,12 @@ from datetime import datetime
 # --- Configuration ---
 
 # Database Connection Details
-DB_HOST = "localhost"
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASS = "postgres"
-DB_PORT = "5432"
+# Database Connection Details (read from environment)
+DB_HOST = os.environ.get("DB_HOST")
+DB_NAME = os.environ.get("DB_NAME")
+DB_USER = os.environ.get("DB_USER")
+DB_PASS = os.environ.get("DB_PASS")
+DB_PORT = os.environ.get("DB_PORT")
 
 # GitHub Repositories to analyze
 GITHUB_REPOS = [
@@ -21,11 +22,11 @@ GITHUB_REPOS = [
 ]
 
 # GitHub API Configuration
-# It's highly recommended to use a Personal Access Token
-# to avoid rate limiting.
-GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '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')
-if GITHUB_TOKEN == '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':
-    print("Warning: For better rate limits, set your GITHUB_TOKEN environment variable or edit the script.")
+
+# GitHub API Configuration (read from environment)
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+if not GITHUB_TOKEN:
+    print("Warning: For better rate limits, set your GITHUB_TOKEN environment variable in .env.")
 
 HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",
