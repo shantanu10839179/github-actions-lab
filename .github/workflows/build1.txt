@@ -17,16 +17,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Java (if needed)
+        uses: actions/setup-java@v4
         with:
-          python-version: '3.11'
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Install dependencies and run tests with coverage
-        run: |
-          pip install pytest coverage
-          coverage run -m pytest
-          coverage xml
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
@@ -34,6 +36,5 @@ jobs:
           args: >
             -Dsonar.projectKey=shantanu10839179_github-actions-lab
             -Dsonar.organization=shantanu10839179-1
-            -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

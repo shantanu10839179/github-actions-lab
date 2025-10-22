@@ -2,8 +2,9 @@ import os
 import requests
 import psycopg2
 from dotenv import load_dotenv
-
 from datetime import datetime
+import time
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -78,12 +79,10 @@ def setup_database(conn):
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
             """)
-            
             cursor.execute("""
             CREATE INDEX IF NOT EXISTS idx_sonarqube_results_repo_date 
             ON sonarqube_results(repo_name, analysis_date);
             """)
-            
         conn.commit()
         print("Database setup complete. SonarQube results table is ready.")
     except (Exception, psycopg2.Error) as error:
@@ -106,39 +105,39 @@ def insert_sonar_data(conn, data):
 
 # --- SonarCloud API Functions ---
 
-def get_project_measures(project_key):
-    """Get key measures from SonarCloud for a project."""
-    metrics = [
-        'coverage', 'bugs', 'vulnerabilities', 'code_smells',
-        'sqale_index', 'ncloc', 'duplicated_lines_density',
-        'maintainability_rating', 'reliability_rating', 'security_rating'
-    ]
-    
+def get_project_measures_with_retry(project_key, metrics, max_retries=5, delay=10):
+    """Get key measures from SonarCloud for a project with retry logic."""
     url = f"{SONAR_HOST}/api/measures/component"
     params = {
         'component': project_key,
         'metricKeys': ','.join(metrics)
     }
-    
-    try:
-        response = requests.get(url, headers=HEADERS, params=params)
-        response.raise_for_status()
-        data = response.json()
-        
-        measures = {}
-        for measure in data.get('component', {}).get('measures', []):
-            measures[measure['metric']] = measure.get('value')
-        
-        return measures
-    except requests.exceptions.RequestException as e:
-        print(f"  - ERROR: Failed to get measures for {project_key}: {e}")
-        return {}
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = requests.get(url, headers=HEADERS, params=params)
+            if response.status_code == 404:
+                print(f"Attempt {attempt}: 404 Not Found for project '{project_key}'. Retrying in {delay} seconds...")
+                time.sleep(delay)
+                continue
+            response.raise_for_status()
+            data = response.json()
+            measures = {
+                measure['metric']: measure.get('value')
+                for measure in data.get('component', {}).get('measures', [])
+            }
+            return measures
+        except requests.exceptions.RequestException as e:
+            print(f"Attempt {attempt}: Error fetching measures for '{project_key}': {e}")
+            time.sleep(delay)
+
+    print(f"Failed to retrieve measures for project '{project_key}' after {max_retries} attempts.")
+    return {}
 
 def get_quality_gate_status(project_key):
     """Get quality gate status for a project."""
     url = f"{SONAR_HOST}/api/qualitygates/project_status"
     params = {'projectKey': project_key}
-    
     try:
         response = requests.get(url, headers=HEADERS, params=params)
         response.raise_for_status()
@@ -155,12 +154,10 @@ def get_latest_analysis(project_key):
         'project': project_key,
         'ps': 1  # Get only the latest analysis
     }
-    
     try:
         response = requests.get(url, headers=HEADERS, params=params)
         response.raise_for_status()
         data = response.json()
-        
         analyses = data.get('analyses', [])
         if analyses:
             latest = analyses[0]
@@ -196,30 +193,34 @@ def process_project(project_info):
     """Process a single SonarCloud project and return data for database."""
     project_key = project_info['project_key']
     repo_name = project_info['repo_name']
-    
     print(f"  - Processing project: {project_key}")
-    
+
     # Get latest analysis info
     analysis_info = get_latest_analysis(project_key)
     if not analysis_info:
         print(f"  - No analysis found for {project_key}")
         return []
-    
-    # Get measures
-    measures = get_project_measures(project_key)
+
+    # Get measures with retry logic
+    metrics = [
+        'coverage', 'bugs', 'vulnerabilities', 'code_smells',
+        'sqale_index', 'ncloc', 'duplicated_lines_density',
+        'maintainability_rating', 'reliability_rating', 'security_rating'
+    ]
+    measures = get_project_measures_with_retry(project_key, metrics)
     if not measures:
         print(f"  - No measures found for {project_key}")
         return []
-    
+
     # Get quality gate status
     quality_gate = get_quality_gate_status(project_key)
-    
+
     # Parse analysis date
     try:
         analysis_date = datetime.fromisoformat(analysis_info['date'].replace('Z', '+00:00'))
     except:
         analysis_date = datetime.now()
-    
+
     # Prepare data for database
     data = (
         repo_name,
@@ -238,7 +239,7 @@ def process_project(project_info):
         safe_int(measures.get('reliability_rating')),
         safe_int(measures.get('security_rating'))
     )
-    
+
     return [data]
 
 def main():
@@ -247,18 +248,18 @@ def main():
         print("ERROR: SONAR_TOKEN environment variable not set")
         print("Please set your SonarCloud token in the environment variables")
         return
-    
+
     print("Starting SonarQube analysis data collection...")
-    
+
     # Connect to database
     db_connection = get_db_connection()
     if not db_connection:
         print("Failed to connect to database. Exiting.")
         return
-    
+
     # Setup database table
     setup_database(db_connection)
-    
+
     # Process each project
     all_data = []
     for project in SONAR_PROJECTS:
@@ -268,14 +269,14 @@ def main():
         except Exception as e:
             print(f"Error processing project {project['project_key']}: {e}")
             continue
-    
+
     # Insert data into database
     if all_data:
         insert_sonar_data(db_connection, all_data)
         print(f"Successfully processed {len(all_data)} SonarQube analysis records")
     else:
         print("No SonarQube data to insert")
-    
+
     # Close database connection
     db_connection.close()
     print("SonarQube data collection completed.")
