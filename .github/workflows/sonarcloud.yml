@@ -1,0 +1,8 @@
+- name: SonarCloud Scan
+  uses: sonarsource/sonarcloud-github-action@v2
+  with:
+    args: >
+      -Dsonar.projectKey=shantanu10839179_github-actions-lab
+      -Dsonar.organization=shantanu10839179-1
+  env:
+    SONAR_TOKEN: 294820870a94d150f183ee9bdf493b237b0fe537
