@@ -19,7 +19,7 @@ DB_PORT = os.environ.get("DB_PORT", "5432")
 # SonarCloud Configuration
 SONAR_TOKEN = os.environ.get('SONAR_TOKEN')
 SONAR_HOST = "https://sonarcloud.io"
-SONAR_ORGANIZATION = os.environ.get('SONAR_ORGANIZATION', 'shantanu10839179')
+SONAR_ORGANIZATION = os.environ.get('SONAR_ORGANIZATION', 'shantanu10839179-1')
 
 # SonarCloud Projects to analyze
 SONAR_PROJECTS = [

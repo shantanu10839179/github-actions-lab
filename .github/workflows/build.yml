@@ -35,6 +35,6 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=shantanu10839179_github-actions-lab
-            -Dsonar.organization=shantanu10839179
+            -Dsonar.organization=shantanu10839179-1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
