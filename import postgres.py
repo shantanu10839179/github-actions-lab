@@ -4,7 +4,8 @@ import requests
 import psycopg2
 from datetime import datetime, timedelta
 import logging
-
+from dotenv import load_dotenv
+load_dotenv()
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 
@@ -158,11 +159,11 @@ def store_commits_in_db(commit_metrics):
     cursor.close()
     conn.close()
     print(f"Stored {len(commit_metrics)} commits in the database")
-
+######
 def main():
-    repos = ["grafana/grafana", "microsoft/TypeScript","fastapi/fastapi","rvijaykumar74/github-actions-lab"]  # List of repositories
+    repos = ["grafana/grafana", "microsoft/TypeScript","fastapi/fastapi","rvijaykumar74/github-actions-lab", "shantanu10839179/github-actions-lab"]  # List of repositories
     start_date = datetime.strptime('2025-08-25', '%Y-%m-%d')
-    end_date = datetime.strptime('2025-10-16', '%Y-%m-%d')
+    end_date = datetime.strptime('2025-10-23', '%Y-%m-%d')
 
     current_date = start_date
     while current_date <= end_date:

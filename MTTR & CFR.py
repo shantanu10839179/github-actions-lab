@@ -2,9 +2,9 @@ import os
 import requests
 import psycopg2
 from datetime import datetime
-
+from dotenv import load_dotenv
 # --- Configuration ---
-
+load_dotenv()
 # Database Connection Details
 DB_HOST = "localhost"
 DB_NAME = "postgres"

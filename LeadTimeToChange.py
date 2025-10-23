@@ -2,9 +2,10 @@ import os
 import requests
 import psycopg2
 from datetime import datetime
+from dotenv import load_dotenv
 
 # --- Configuration ---
-
+load_dotenv()
 # Database Connection Details
 # Database Connection Details (read from environment)
 DB_HOST = os.environ.get("DB_HOST")
@@ -18,7 +19,8 @@ GITHUB_REPOS = [
     "grafana/grafana",
     "microsoft/TypeScript",
     "fastapi/fastapi",
-    "rvijaykumar74/github-actions-lab"
+    "rvijaykumar74/github-actions-lab",
+    "shantanu10839179/github-actions-lab"
 ]
 
 # GitHub API Configuration

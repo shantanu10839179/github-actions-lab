@@ -63,7 +63,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -112,7 +112,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -127,7 +127,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -176,7 +176,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -191,7 +191,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -240,7 +240,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -255,7 +255,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -304,7 +304,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -319,7 +319,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -370,7 +370,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -385,7 +385,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -436,7 +436,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -464,7 +464,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -555,7 +555,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -570,7 +570,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -678,7 +678,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -716,7 +716,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -795,7 +795,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -810,7 +810,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -888,7 +888,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -903,7 +903,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -980,7 +980,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "time_series",
@@ -995,7 +995,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1069,7 +1069,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "time_series",
@@ -1097,7 +1097,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1171,7 +1171,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "time_series",
@@ -1186,7 +1186,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1235,7 +1235,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1250,7 +1250,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1299,7 +1299,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1314,7 +1314,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1363,7 +1363,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1378,7 +1378,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1429,7 +1429,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1457,7 +1457,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1508,7 +1508,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1523,7 +1523,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1577,7 +1577,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1592,7 +1592,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1650,7 +1650,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1665,7 +1665,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1723,7 +1723,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1738,7 +1738,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "description": "<table style=\"width:100%\">\n  <tr>\n    <th>Value (Range)</th>\n    <th>Score</th>\n  </tr>\n  <tr>\n    <td>&lt; 1 hour</td>\n    <td>9-10</td>\n  </tr>\n  <tr>\n    <td>&lt; 1 day</td>\n    <td>7-8</td>\n  </tr>\n  <tr>\n    <td>1 day - 1 week</td>\n    <td>5-6</td>\n  </tr>\n  <tr>\n    <td>1 week - 1 month</td>\n    <td>3-4</td>\n  </tr>\n  <tr>\n    <td>1 month - 6 months</td>\n    <td>1-2</td>\n  </tr>\n  <tr>\n    <td>&gt; 6 months</td>\n    <td>0</td>\n  </tr>\n</table>",
       "fieldConfig": {
@@ -1800,7 +1800,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1832,7 +1832,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "description": "<table style=\"border: 1px solid #ccc; border-collapse: collapse;\">\n  <thead>\n    <tr>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Value</th>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Score</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">On Demand</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">9-10</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 hour - 1 day</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">7-8</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 day - 1 week</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">5-6</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 week - 1 month</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">3-4</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 month - 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1-2</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&gt; 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">0</td>\n    </tr>\n  </tbody>\n</table>",
       "fieldConfig": {
@@ -1894,7 +1894,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -1926,7 +1926,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "description": "<table style=\"border: 1px solid #ccc; border-collapse: collapse;\">\n  <thead>\n    <tr>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Value</th>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Score</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&lt;1 hour</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">0-17</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&lt;1 day</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">18-34</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 day - 1 week</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">35-51</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 week - 1 month</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">52-67</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 month - 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">68-84</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&gt; 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">85-100</td>\n    </tr>\n  </tbody>\n</table>",
       "fieldConfig": {
@@ -1988,7 +1988,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -2003,7 +2003,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "aevcm5mgzrabka"
+        "uid": "cf1wcvvbfak8wd"
       },
       "description": "<table style=\"border: 1px solid #ccc; border-collapse: collapse;\">\n  <thead>\n    <tr>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Value</th>\n      <th style=\"border: 1px solid #ccc; padding: 8px; text-align: left;\">Score</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&lt;1 hour</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">9-10</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&lt;1 day</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">7-8</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 day - 1 week</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">5-6</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 week - 1 month</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">3-4</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1 month - 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">1-2</td>\n    </tr>\n    <tr>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">&gt; 6 months</td>\n      <td style=\"border: 1px solid #ccc; padding: 8px;\">0</td>\n    </tr>\n  </tbody>\n</table>",
       "fieldConfig": {
@@ -2065,7 +2065,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "editorMode": "code",
           "format": "table",
@@ -2090,7 +2090,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "aevcm5mgzrabka"
+            "uid": "cf1wcvvbfak8wd"
           },
           "description": "Benchmarking<br>Elite - If score is >8-10 <br>High - If score is >6-8 <br> Medium - If score is >4-6 <br> Low - If score is below 4",
           "fieldConfig": {
@@ -2244,7 +2244,7 @@
             {
               "datasource": {
                 "type": "grafana-postgresql-datasource",
-                "uid": "aevcm5mgzrabka"
+                "uid": "cf1wcvvbfak8wd"
               },
               "editorMode": "code",
               "format": "table",
@@ -2296,7 +2296,7 @@
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
-          "uid": "aevcm5mgzrabka"
+          "uid": "cf1wcvvbfak8wd"
         },
         "definition": "SELECT repo_name FROM commit_details\nUNION\nSELECT repo_name FROM pr_details\nUNION\nSELECT repo_name FROM lead_time_to_change\nUNION\nSELECT repo_name FROM incidents_for_mttr\nUNION\nSELECT repo_name FROM change_failure_rate_runs\nUNION\nSELECT repo_name FROM build_durations\nORDER BY repo_name",
         "description": "Filter by one or more repositories.",
@@ -2320,6 +2320,6 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Comprehensive DORA and Dev Metrics Dashboard",
-  "uid": "aevcm5mgzrabka",
+  "uid": "cf1wcvvbfak8wd",
   "version": 77
 }
