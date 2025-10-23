@@ -2273,7 +2273,7 @@
           "title": "Current Delivery Performance",
           "type": "stat"
         }
-      ],
+     ],
       "title": "DORA Performance Score",
       "type": "row"
     }
@@ -2287,11 +2287,13 @@
         "current": {
           "text": [
             "microsoft/TypeScript",
-            "rajiva11/github-actions-lab"
+            "rajiva11/github-actions-lab", "shantanu10839179/github-actions-lab",
+    "shantanu10839179/devsecopsdashboard"
           ],
           "value": [
             "microsoft/TypeScript",
-            "rajiva11/github-actions-lab"
+            "rajiva11/github-actions-lab", "shantanu10839179/github-actions-lab",
+    "shantanu10839179/devsecopsdashboard"
           ]
         },
         "datasource": {
@@ -2319,7 +2321,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Comprehensive DORA and Dev Metrics Dashboard",
+  "title": "NewDashboard",
   "uid": "cf1wcvvbfak8wd",
   "version": 77
 }

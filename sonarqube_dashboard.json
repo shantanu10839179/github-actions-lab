@@ -1,0 +1,126 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1620000000000,
+  "panels": [
+    {
+      "id": 200,
+      "title": "SonarQube Coverage Over Time",
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single" }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT analysis_date AS \"time\", project_key, coverage::float FROM sonarqube_results WHERE $__timeFilter(analysis_date) AND project_key = 'shantanu10839179_github-actions-lab' ORDER BY analysis_date ASC;",
+          "refId": "A"
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "id": 201,
+      "title": "SonarQube Bugs, Vulnerabilities, Code Smells",
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "options": {
+        "orientation": "auto",
+        "showValue": "auto",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true }
+      },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT analysis_date AS \"time\", bugs::int, vulnerabilities::int, code_smells::int FROM sonarqube_results WHERE $__timeFilter(analysis_date) AND project_key = 'shantanu10839179_github-actions-lab' ORDER BY analysis_date ASC;",
+          "refId": "A"
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "id": 202,
+      "title": "SonarQube Reliability Rating",
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 8 },
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto" },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT reliability_rating::float FROM sonarqube_results WHERE project_key = 'shantanu10839179_github-actions-lab' ORDER BY analysis_date DESC LIMIT 1;",
+          "refId": "A"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "id": 203,
+      "title": "SonarQube Security Rating",
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 8 },
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto" },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT security_rating::float FROM sonarqube_results WHERE project_key = 'shantanu10839179_github-actions-lab' ORDER BY analysis_date DESC LIMIT 1;",
+          "refId": "A"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "id": 204,
+      "title": "SonarQube Maintainability Rating",
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 8 },
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto" },
+      "pluginVersion": "12.0.0",
+      "targets": [
+        {
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "cf1wcvvbfak8wd" },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT maintainability_rating::float FROM sonarqube_results WHERE project_key = 'shantanu10839179_github-actions-lab' ORDER BY analysis_date DESC LIMIT 1;",
+          "refId": "A"
+        }
+      ],
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 41,
+  "style": "dark",
+  "tags": [],
+  "templating": { "list": [] },
+  "time": { "from": "now-30d", "to": "now" },
+  "timezone": "browser",
+  "title": "SonarQube Dashboard",
+  "uid": null,
+  "version": 1
+}
