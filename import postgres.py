@@ -1,0 +1,273 @@
+
+import os
+import requests
+import psycopg2
+import time
+from datetime import datetime, timedelta
+import logging
+from dotenv import load_dotenv
+load_dotenv()
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+
+# Load secrets from environment variables (.env)
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASS = os.environ.get('DB_PASS')
+
+HEADERS = {'Authorization': f'token {GITHUB_TOKEN}'}
+GITHUB_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
+
+def handle_rate_limit(response):
+    if response.status_code == 403 and 'X-RateLimit-Remaining' in response.headers:
+        remaining = int(response.headers['X-RateLimit-Remaining'])
+        if remaining == 0:
+            reset_time = int(response.headers['X-RateLimit-Reset'])
+            wait_time = reset_time - int(datetime.now().timestamp()) + 1
+            if wait_time > 0:
+                print(f"Rate limit exceeded. Waiting {wait_time} seconds...")
+                time.sleep(wait_time)
+                return True
+    return False
+
+def fetch_pull_requests(repo, start_date, end_date):
+    print(f"Fetching pull requests for {repo} from {start_date} to {end_date}")
+    prs_url = f'https://api.github.com/repos/{repo}/pulls?state=all&since={start_date}'
+    prs_response = requests.get(prs_url, headers=HEADERS)
+    
+    if prs_response.status_code != 200:
+        print(f"Error fetching pull requests: {prs_response.status_code}")
+        print(f"Response: {prs_response.text}")
+        return []
+        
+    prs_data = prs_response.json()
+    if not isinstance(prs_data, list):
+        print(f"Unexpected response format: {prs_data}")
+        return []
+
+    pr_metrics = []
+    for pr in prs_data:
+        pr_created_at = datetime.strptime(pr['created_at'], GITHUB_DATETIME_FORMAT)
+        if pr_created_at > datetime.strptime(end_date, GITHUB_DATETIME_FORMAT):
+            continue
+
+        pr_metric = {
+            'repo_name': repo,
+            'start_date': start_date,
+            'end_date': end_date,
+            'pr_number': pr['number'],
+            'state': pr['state'],
+            'author': pr['user']['login'],
+            'merged': pr['merged_at'] is not None,
+            'merge_time': None,
+            'review_time': None,
+            'review_count': 0,
+            'comment_count': 0,
+            'additions': 0,
+            'deletions': 0,
+            'changed_files': 0
+        }
+
+        if pr_metric['merged']:
+            pr_metric['merge_time'] = datetime.strptime(pr['merged_at'], GITHUB_DATETIME_FORMAT) - datetime.strptime(pr['created_at'], GITHUB_DATETIME_FORMAT)
+
+        reviews_url = pr['url'] + '/reviews'
+        try:
+            reviews_response = requests.get(reviews_url, headers=HEADERS)
+            if reviews_response.status_code == 200:
+                reviews_data = reviews_response.json()
+                pr_metric['review_count'] = len(reviews_data)
+                if reviews_data:
+                    pr_metric['review_time'] = datetime.strptime(reviews_data[0]['submitted_at'], GITHUB_DATETIME_FORMAT) - datetime.strptime(pr['created_at'], GITHUB_DATETIME_FORMAT)
+            else:
+                print(f"Error fetching reviews: {reviews_response.status_code}")
+        except Exception as e:
+            print(f"Error processing reviews: {str(e)}")
+            pr_metric['review_count'] = 0
+
+        comments_url = pr['url'] + '/comments'
+        try:
+            comments_response = requests.get(comments_url, headers=HEADERS)
+            if comments_response.status_code == 200:
+                comments_data = comments_response.json()
+                pr_metric['comment_count'] = len(comments_data)
+            else:
+                print(f"Error fetching comments: {comments_response.status_code}")
+                pr_metric['comment_count'] = 0
+        except Exception as e:
+            print(f"Error processing comments: {str(e)}")
+            pr_metric['comment_count'] = 0
+
+        files_url = pr['url'] + '/files'
+        try:
+            files_response = requests.get(files_url, headers=HEADERS)
+            if files_response.status_code == 200:
+                files_data = files_response.json()
+                pr_metric['changed_files'] = len(files_data)
+                for file in files_data:
+                    pr_metric['additions'] += file.get('additions', 0)
+                    pr_metric['deletions'] += file.get('deletions', 0)
+            else:
+                print(f"Error fetching files: {files_response.status_code}")
+        except Exception as e:
+            print(f"Error processing files: {str(e)}")
+            pr_metric['changed_files'] = 0
+
+        pr_metrics.append(pr_metric)
+
+    print(f"Fetched {len(pr_metrics)} pull requests for {repo} from {start_date} to {end_date}")
+    return pr_metrics
+
+def fetch_commits(repo, start_date, end_date):
+    print(f"Fetching commits for {repo} from {start_date} to {end_date}")
+    commits_url = f'https://api.github.com/repos/{repo}/commits?since={start_date}&until={end_date}'
+    commits_response = requests.get(commits_url, headers=HEADERS)
+    
+    if commits_response.status_code != 200:
+        print(f"Error fetching commits: {commits_response.status_code}")
+        print(f"Response: {commits_response.text}")
+        return []
+        
+    commits_data = commits_response.json()
+    if not isinstance(commits_data, list):
+        print(f"Unexpected response format: {commits_data}")
+        return []
+
+    commit_metrics = []
+    for commit in commits_data:
+        commit_date = datetime.strptime(commit['commit']['author']['date'], GITHUB_DATETIME_FORMAT).date()
+        commit_metric = {
+            'repo_name': repo,
+            'start_date': start_date,
+            'end_date': end_date,
+            'commit_date': commit_date.strftime('%Y-%m-%d'),  # Convert to string
+            'commit_hash': commit['sha'],
+            'commit_user': commit['commit']['author']['name'],
+            'commit_message': commit['commit']['message'],
+            'files_changed': 0,
+            'additions': 0,
+            'deletions': 0
+        }
+
+        commit_details_url = f'https://api.github.com/repos/{repo}/commits/{commit["sha"]}'
+        try:
+            commit_details_response = requests.get(commit_details_url, headers=HEADERS)
+            if commit_details_response.status_code == 200:
+                commit_details_data = commit_details_response.json()
+                files_data = commit_details_data.get('files', [])
+                commit_metric['files_changed'] = len(files_data)
+                for file in files_data:
+                    commit_metric['additions'] += file.get('additions', 0)
+                    commit_metric['deletions'] += file.get('deletions', 0)
+            else:
+                print(f"Error fetching commit details: {commit_details_response.status_code}")
+        except Exception as e:
+            print(f"Error processing commit details: {str(e)}")
+            commit_metric['files_changed'] = 0
+
+        commit_metrics.append(commit_metric)
+
+    print(f"Fetched {len(commit_metrics)} commits for {repo} from {start_date} to {end_date}")
+    return commit_metrics
+
+def store_pull_requests_in_db(pr_metrics):
+    print(f"Storing {len(pr_metrics)} pull requests in the database")
+    conn = None
+    try:
+        conn = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+        cursor = conn.cursor()
+        insert_query = """
+        INSERT INTO pr_details (repo_name, start_date, end_date, pr_number, state, author, merged, merge_time, review_time, review_count, comment_count, additions, deletions, changed_files)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        for pr_metric in pr_metrics:
+            try:
+                cursor.execute(insert_query, (pr_metric['repo_name'], pr_metric['start_date'], pr_metric['end_date'], pr_metric['pr_number'], pr_metric['state'], pr_metric['author'], pr_metric['merged'], pr_metric['merge_time'], pr_metric['review_time'], pr_metric['review_count'], pr_metric['comment_count'], pr_metric['additions'], pr_metric['deletions'], pr_metric['changed_files']))
+            except Exception as e:
+                print(f"Error inserting PR metric: {e}")
+                print(f"PR metric data: {pr_metric}")
+                conn.rollback()
+                continue
+        conn.commit()
+        print(f"Stored {len(pr_metrics)} pull requests in the database")
+    except Exception as e:
+        print(f"Database connection error: {e}")
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+def store_commits_in_db(commit_metrics):
+    print(f"Storing {len(commit_metrics)} commits in the database")
+    conn = None
+    try:
+        conn = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+        cursor = conn.cursor()
+        insert_query = """
+        INSERT INTO commit_details (repo_name, start_date, end_date, commit_date, commit_hash, commit_user, commit_message, files_changed, additions, deletions)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        for commit_metric in commit_metrics:
+            print(f"Inserting commit: {commit_metric}")
+            try:
+                # Ensure all values are strings, and provide default values for integer columns
+                sql_command = cursor.mogrify(insert_query, (
+                    str(commit_metric['repo_name']), 
+                    str(commit_metric['start_date']), 
+                    str(commit_metric['end_date']), 
+                    str(commit_metric['commit_date']), 
+                    str(commit_metric['commit_hash']),
+                    str(commit_metric['commit_user']),
+                    str(commit_metric['commit_message']),
+                    int(commit_metric['files_changed'] if commit_metric['files_changed'] is not None else 0),
+                    int(commit_metric['additions'] if commit_metric['additions'] is not None else 0),
+                    int(commit_metric['deletions'] if commit_metric['deletions'] is not None else 0)
+                ))
+                print(f"Executed SQL: {sql_command}")
+                cursor.execute(sql_command)
+            except Exception as e:
+                print(f"Error inserting commit: {commit_metric}")
+                print(e)
+                conn.rollback()
+                continue
+        conn.commit()
+        print(f"Stored {len(commit_metrics)} commits in the database")
+    except Exception as e:
+        print(f"Database connection error: {e}")
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+######
+def main():
+    repos = ["grafana/grafana", "microsoft/TypeScript","fastapi/fastapi",
+    "rvijaykumar74/github-actions-lab","shantanu10839179/github-actions-lab",
+    "shantanu10839179/devsecopsdashboard"]  
+    # List of repositories
+    start_date = datetime.strptime('2025-08-25', '%Y-%m-%d')
+    end_date = datetime.strptime('2025-10-23', '%Y-%m-%d')
+
+    current_date = start_date
+    while current_date <= end_date:
+        start_datetime = current_date.strftime('%Y-%m-%dT00:00:00Z')
+        end_datetime = current_date.strftime('%Y-%m-%dT23:59:59Z')
+        print(f"Processing data for {current_date.strftime('%Y-%m-%d')}")
+        for repo in repos:
+            pr_metrics = fetch_pull_requests(repo, start_datetime, end_datetime)
+            store_pull_requests_in_db(pr_metrics)
+            
+            commit_metrics = fetch_commits(repo, start_datetime, end_datetime)
+            store_commits_in_db(commit_metrics)
+        
+        current_date += timedelta(days=1)
+        print(f"Completed processing for {current_date.strftime('%Y-%m-%d')}")
+
+if __name__ == '__main__':
+    main()

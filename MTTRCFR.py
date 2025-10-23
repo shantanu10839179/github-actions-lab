@@ -23,10 +23,14 @@ GITHUB_REPOS = [
 
 # GitHub API Configuration
 # IMPORTANT: Please replace 'YOUR_GITHUB_TOKEN_HERE' with your actual token to remove the warning.
-GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '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')
-if GITHUB_TOKEN == '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':
-    print("CRITICAL: GitHub token not found. The script will likely fail to fetch Actions data.")
-    print("Please edit the script to add your Personal Access Token.")
+#GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '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')
+#if GITHUB_TOKEN == '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':
+ #   print("CRITICAL: GitHub token not found. The script will likely fail to fetch Actions data.")
+  #  print("Please edit the script to add your Personal Access Token.")
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+if not GITHUB_TOKEN:
+    print("Warning: For better rate limits, set your GITHUB_TOKEN environment variable in .env.")
+
 
 HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",

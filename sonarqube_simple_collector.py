@@ -9,9 +9,10 @@ load_dotenv()
 
 
 # this block to verify .env loading
-print("SONAR_TOKEN:", os.environ.get("SONAR_TOKEN"))
+print("Environment variables loaded:")
+print("SONAR_TOKEN:", "✓" if os.environ.get("SONAR_TOKEN") else "✗")
 print("DB_HOST:", os.environ.get("DB_HOST"))
-print("GITHUB_TOKEN:", os.environ.get("GITHUB_TOKEN"))
+print("GITHUB_TOKEN:", "✓" if os.environ.get("GITHUB_TOKEN") else "✗")
 
 
 # --- Configuration ---
@@ -25,12 +26,25 @@ DB_PORT = os.environ.get("DB_PORT", "5432")
 # SonarCloud Configuration
 SONAR_TOKEN = os.environ.get('SONAR_TOKEN')
 SONAR_HOST = "https://sonarcloud.io"
-SONAR_ORGANIZATION = os.environ.get('SONAR_ORGANIZATION', 'shantanu10839179')
 
 # SonarCloud Projects to analyze
 SONAR_PROJECTS = [
     {
-        'project_key': 'shantanu10839179_github-actions-lab',
+        'project_key': 'shantanu10839179_github-actions-lab',  # Exact project key from SonarCloud
+        'repo_name': 'shantanu10839179/github-actions-lab'
+    }
+    # Add more projects here as needed
+]
+
+# Set organization explicitly based on your SonarCloud setup
+SONAR_ORGANIZATION = os.environ.get('SONAR_ORGANIZATION')
+if not SONAR_ORGANIZATION:
+    print("ERROR: SONAR_ORGANIZATION not set in .env file!")
+else:
+    print(f"Using SonarCloud organization: {SONAR_ORGANIZATION}")
+SONAR_PROJECTS = [
+    {
+        'project_key': 'shantanu10839179_github-actions-lab',  # Use dashes instead of underscores
         'repo_name': 'shantanu10839179/github-actions-lab'
     }
     # Add more projects here as needed
@@ -55,7 +69,7 @@ def get_db_connection():
             port=DB_PORT
         )
         return conn
-    except (Exception, psycopg2.Error) as error:
+    except psycopg2.Error as error:
         print(f"Error while connecting to PostgreSQL: {error}")
         return None
 
@@ -92,8 +106,10 @@ def setup_database(conn):
             
         conn.commit()
         print("Database setup complete. SonarQube results table is ready.")
-    except (Exception, psycopg2.Error) as error:
+    except psycopg2.Error as error:
         print(f"Error during database setup: {error}")
+        if conn:
+            conn.rollback()
 
 def insert_sonar_data(conn, data):
     """Insert SonarQube analysis data into the database."""
@@ -127,17 +143,38 @@ def get_project_measures(project_key):
     }
     
     try:
+        print(f"  - Fetching measures from {url}")
         response = requests.get(url, headers=HEADERS, params=params)
+        print(f"  - Response status code: {response.status_code}")
+        
+        if response.status_code == 401:
+            print("  - Authentication failed. Please check your SONAR_TOKEN")
+            return {}
+        elif response.status_code == 404:
+            print(f"  - Project {project_key} not found in SonarCloud")
+            return {}
+        
         response.raise_for_status()
         data = response.json()
         
+        if 'errors' in data:
+            print(f"  - API returned errors: {data['errors']}")
+            return {}
+            
         measures = {}
         for measure in data.get('component', {}).get('measures', []):
             measures[measure['metric']] = measure.get('value')
         
+        if not measures:
+            print(f"  - No measures found in response for {project_key}")
+            print(f"  - Response content: {data}")
+            
         return measures
     except requests.exceptions.RequestException as e:
         print(f"  - ERROR: Failed to get measures for {project_key}: {e}")
+        return {}
+    except ValueError as e:
+        print(f"  - ERROR: Invalid JSON response for {project_key}: {e}")
         return {}
 
 def get_quality_gate_status(project_key):
@@ -198,12 +235,43 @@ def safe_int(value, default=0):
     except (ValueError, TypeError):
         return default
 
+def verify_project_exists(project_key):
+    """Verify if a project exists in SonarCloud."""
+    url = f"{SONAR_HOST}/api/projects/search"
+    params = {
+        'projects': project_key,
+        'organization': SONAR_ORGANIZATION
+    }
+    print(f"DEBUG: Checking project existence with URL: {url} and params: {params}")
+    try:
+        response = requests.get(url, headers=HEADERS, params=params)
+        print(f"DEBUG: Response status code: {response.status_code}")
+        print(f"DEBUG: Response text: {response.text}")
+        if response.status_code == 200:
+            data = response.json()
+            components = data.get('components', [])
+            return len(components) > 0
+        return False
+    except Exception as e:
+        print(f"  - ERROR: Failed to verify project existence: {e}")
+        return False
+
 def process_project(project_info):
     """Process a single SonarCloud project and return data for database."""
     project_key = project_info['project_key']
     repo_name = project_info['repo_name']
     
     print(f"  - Processing project: {project_key}")
+    
+    # Verify project exists
+    if not verify_project_exists(project_key):
+        print(f"  - Project {project_key} does not exist in SonarCloud organization {SONAR_ORGANIZATION}")
+        print("  - Please make sure:")
+        print("    1. The project has been created in SonarCloud")
+        print("    2. The project key is correct")
+        print("    3. The organization name is correct")
+        print("    4. Your SonarCloud token has the necessary permissions")
+        return []
     
     # Get latest analysis info
     analysis_info = get_latest_analysis(project_key)
@@ -223,7 +291,8 @@ def process_project(project_info):
     # Parse analysis date
     try:
         analysis_date = datetime.fromisoformat(analysis_info['date'].replace('Z', '+00:00'))
-    except:
+    except (ValueError, KeyError) as e:
+        print(f"  - Error parsing analysis date: {e}. Using current time.")
         analysis_date = datetime.now()
     
     # Prepare data for database
@@ -247,11 +316,74 @@ def process_project(project_info):
     
     return [data]
 
+def verify_sonar_access():
+    """Verify SonarCloud token and organization access."""
+    # First verify the token with a simpler API endpoint
+    validate_url = f"{SONAR_HOST}/api/authentication/validate"
+    try:
+        validate_response = requests.get(validate_url, headers=HEADERS)
+        if validate_response.status_code == 401:
+            print("ERROR: Invalid SonarCloud token")
+            return False
+        
+        # Check if the token is valid
+        validate_data = validate_response.json()
+        if not validate_data.get('valid', False):
+            print("ERROR: SonarCloud token is not valid")
+            return False
+            
+        # Now check organization access
+        org_url = f"{SONAR_HOST}/api/organizations/search"
+        org_params = {'organizations': SONAR_ORGANIZATION}
+        org_response = requests.get(org_url, headers=HEADERS, params=org_params)
+        if org_response.status_code == 400:
+            print(f"ERROR: Invalid organization key '{SONAR_ORGANIZATION}'")
+            print("Please check your SONAR_ORGANIZATION value")
+            print("Response:", org_response.text)
+            return False
+        elif org_response.status_code != 200:
+            print(f"ERROR: Failed to verify organization. Status code: {org_response.status_code}")
+            print("Response:", org_response.text)
+            return False
+        org_data = org_response.json()
+        if not org_data.get('organizations', []):
+            print(f"ERROR: Organization '{SONAR_ORGANIZATION}' not found or no access")
+            print("Please verify:")
+            print("1. The organization exists in SonarCloud")
+            print("2. Your token has access to this organization")
+            print("3. You are a member of this organization")
+            return False
+        print(f"Successfully verified access to SonarCloud organization: {SONAR_ORGANIZATION}")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"ERROR: Network error while accessing SonarCloud: {e}")
+        return False
+    except ValueError as e:
+        print(f"ERROR: Invalid response from SonarCloud: {e}")
+        return False
+
 def main():
     """Main function to fetch SonarCloud data and store in database."""
-    if not SONAR_TOKEN:
-        print("ERROR: SONAR_TOKEN environment variable not set")
-        print("Please set your SonarCloud token in the environment variables")
+    # Validate required environment variables
+    required_vars = {
+        'SONAR_TOKEN': SONAR_TOKEN,
+        'DB_HOST': DB_HOST,
+        'DB_NAME': DB_NAME,
+        'DB_USER': DB_USER,
+        'DB_PASS': DB_PASS
+    }
+    
+    missing_vars = [var for var, value in required_vars.items() if not value]
+    if missing_vars:
+        print("ERROR: Missing required environment variables:")
+        for var in missing_vars:
+            print(f"  - {var}")
+        print("Please set these variables in your .env file")
+        return
+        
+    # Verify SonarCloud access
+    if not verify_sonar_access():
         return
     
     print("Starting SonarQube analysis data collection...")
