@@ -19,8 +19,8 @@ GITHUB_REPOS = [
     "grafana/grafana",
     "microsoft/TypeScript",
     "fastapi/fastapi",
-    "rvijaykumar74/github-actions-lab",
-    "shantanu10839179/github-actions-lab"
+    "rvijaykumar74/github-actions-lab","shantanu10839179/github-actions-lab",
+    "shantanu10839179/devsecopsdashboard"
 ]
 
 # GitHub API Configuration
