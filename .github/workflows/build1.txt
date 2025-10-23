@@ -1,0 +1,40 @@
+name: Build and Analyze
+
+on:
+  push:
+    branches:
+      - main
+      - feature
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java (if needed)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=shantanu10839179_github-actions-lab
+            -Dsonar.organization=shantanu10839179-1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
