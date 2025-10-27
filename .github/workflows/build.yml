@@ -3,20 +3,22 @@ on:
   push:
     branches:
       - main
-      - feature/*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
+  sonarqube:
+    name: SonarQube
+    runs-on: windows-latest  # or ubuntu-latest (recommended)
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+          fetch-depth: 0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: shantanu10839179_github-actions-lab
-          SONAR_ORGANIZATION: shantanu10839179
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=shantanu10839179_devsecopsdashboard
+            -Dsonar.organization=shantanu10839179

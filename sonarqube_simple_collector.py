@@ -28,12 +28,23 @@ SONAR_TOKEN = os.environ.get('SONAR_TOKEN')
 SONAR_HOST = "https://sonarcloud.io"
 
 # SonarCloud Projects to analyze
+# SONAR_PROJECTS = [
+#     {
+#         'project_key': 'shantanu10839179_github-actions-lab',  # Exact project key from SonarCloud
+#         'repo_name': 'shantanu10839179/github-actions-lab'
+#     }
+#     # Add more projects here as needed
+# ]
+
 SONAR_PROJECTS = [
-    {
-        'project_key': 'shantanu10839179_github-actions-lab',  # Exact project key from SonarCloud
-        'repo_name': 'shantanu10839179/github-actions-lab'
-    }
-    # Add more projects here as needed
+    { 'project_key': 'shantanu10839179_github-actions-lab', 'repo_name': 'shantanu10839179/github-actions-lab' },
+     { 'project_key': 'devsecopsdashboard', 'repo_name': 'shantanu10839179/devsecopsdashboard' },
+    { 'project_key': 'test_sonar', 'repo_name': 'shantanu10839179/test_sonar' }
+
+       # { 'project_key': 'grafana_grafana', 'repo_name': 'grafana/grafana' },
+    # { 'project_key': 'microsoft_TypeScript', 'repo_name': 'microsoft/TypeScript' },
+    # { 'project_key': 'fastapi_fastapi', 'repo_name': 'fastapi/fastapi' },
+    # { 'project_key': 'rvijaykumar74_github-actions-lab', 'repo_name': 'rvijaykumar74/github-actions-lab' },
 ]
 
 # Set organization explicitly based on your SonarCloud setup
